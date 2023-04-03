@@ -8,8 +8,9 @@ import '../data/NativeData.dart';
 class NativeListItem extends StatefulWidget {
   final Widget child;
   VoidCallback? onTap;
+  bool hoverColors = true;
 
-  NativeListItem({Key? key, required this.child, this.onTap}) : super(key: key);
+  NativeListItem({Key? key, required this.child, this.onTap, this.hoverColors = true}) : super(key: key);
 
   @override
   State<NativeListItem> createState() => _NativeListItemState();
@@ -27,22 +28,22 @@ class _NativeListItemState extends State<NativeListItem> {
         children: [
           GestureDetector(
             onTap: widget.onTap,
-            onTapDown: (details) {
+            onTapDown: widget.hoverColors ? (details) {
               if (widget.onTap != null) {
                 containerColor = MacosColors.systemBlueColor.withOpacity(0.6);
                 setState(() {});
               }
-            },
-            onTapUp: (details) {
+            } : null,
+            onTapUp:  widget.hoverColors ? (details) {
               containerColor = Colors.transparent;
               setState(() {});
-            },
+            } : null,
             child: MouseRegion(
-              cursor: widget.onTap == null
+              cursor: (widget.onTap == null ||  !widget.hoverColors)
                   ? SystemMouseCursors.basic
                   : SystemMouseCursors.click,
               onEnter: (details) {
-                if (widget.onTap != null) {
+                if (widget.onTap != null && widget.hoverColors) {
                   containerColor = MacosTheme.brightnessOf(context).resolve(
                     MacosColors.systemBlueColor.withOpacity(0.1),
                     MacosColors.alternatingContentBackgroundColor,

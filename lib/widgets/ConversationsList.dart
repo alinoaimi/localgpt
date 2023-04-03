@@ -13,9 +13,10 @@ import '../networking/CustomDio.dart';
 class ConversationsList extends StatefulWidget {
 
   DataCallback? onConversationSelected;
+  int? selectedConversationId;
 
 
-  ConversationsList({Key? key, this.onConversationSelected}) : super(key: key);
+  ConversationsList({Key? key, this.onConversationSelected, this.selectedConversationId}) : super(key: key);
 
   @override
   State<ConversationsList> createState() => _ConversationsListState();
@@ -24,6 +25,7 @@ class ConversationsList extends StatefulWidget {
 class _ConversationsListState extends State<ConversationsList> {
   bool conversationsLoading = true;
   List<dynamic> conversations = [];
+  int? selectedConversationId;
 
   loadConversations() async {
 
@@ -48,6 +50,10 @@ class _ConversationsListState extends State<ConversationsList> {
   @override
   void initState() {
     super.initState();
+
+    if(widget.selectedConversationId != null) {
+      selectedConversationId = widget.selectedConversationId;
+    }
 
     loadConversations();
 
@@ -84,13 +90,18 @@ class _ConversationsListState extends State<ConversationsList> {
       List<Widget> conversationsWidgets = [];
       
       for(var conversation in conversations) {
-        conversationsWidgets.add(NativeListItem(
-            onTap: () {
-              if(widget.onConversationSelected != null) {
-                widget.onConversationSelected!(conversation['id']);
-              }
-            },
-            child: ConversationListItem(conversation: conversation)));
+        conversationsWidgets.add(Container(
+          color: conversation['id'] == selectedConversationId ? Theme.of(context).primaryColorDark : Colors.transparent,
+          child: NativeListItem(
+              hoverColors: false,
+              onTap: () {
+                if(widget.onConversationSelected != null) {
+                  selectedConversationId = conversation['id'];
+                  widget.onConversationSelected!(conversation['id']);
+                }
+              },
+              child: ConversationListItem(conversation: conversation)),
+        ));
         conversationsWidgets.add(
           Container(
             height: 1,

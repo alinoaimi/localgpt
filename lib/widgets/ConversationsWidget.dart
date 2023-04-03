@@ -33,11 +33,21 @@ class _ConversationsWidgetState extends State<ConversationsWidget> {
 
     var desktopBody = Row(
       children: [
-        ConversationsList(onConversationSelected: (conversationId) {
-          selectedConversationId = conversationId;
-          setState(() {
+        ConversationsList(
+          selectedConversationId: selectedConversationId,
+          onConversationSelected: (conversationId) async {
+          if(conversationId != selectedConversationId) {
+            selectedConversationId = null;
+            setState(() {
 
-          });
+            });
+            await Future<void>.delayed(const Duration(milliseconds: 30));
+
+            selectedConversationId = conversationId;
+            setState(() {
+
+            });
+          }
         },),
         const VerticalDivider(color: Colors.white24,indent: 0, endIndent: 0, width: 1,),
         Expanded(child: conversationArea)
