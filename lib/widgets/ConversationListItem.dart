@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ConversationListItem extends StatelessWidget {
-
   dynamic conversation;
 
   ConversationListItem({Key? key, this.conversation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     Widget body;
 
     body = Container(
@@ -22,13 +20,33 @@ class ConversationListItem extends StatelessWidget {
             CircleAvatar(
               backgroundImage: AssetImage('assets/images/typingrobot.png'),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('GPT4all'),
-                const Text('last message', style: TextStyle(fontSize: 12, color: Colors.white54),),
-               const Divider(color: Colors.red, height: 1,),
+                Text(conversation['engine']),
+                const SizedBox(height: 5,),
+                Container(
+                  width: 180,
+                  child: Text(
+                    conversation['last_message'] == null
+                        ? ''
+                        : conversation['last_message']['text'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).primaryTextTheme.bodySmall?.color,
+                    ),
+                  ),
+                ),
+                const Divider(
+                  color: Colors.red,
+                  height: 1,
+                ),
               ],
             )
           ],

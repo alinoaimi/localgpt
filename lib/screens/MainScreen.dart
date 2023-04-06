@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localgptflutter/always-native/widgets/NativeCircularProgressIndicator.dart';
 import 'package:localgptflutter/always-native/widgets/NativeWindow.dart';
 import 'package:localgptflutter/data/settings.dart';
@@ -9,6 +10,11 @@ import 'package:localgptflutter/networking/CustomDio.dart';
 import 'package:localgptflutter/widgets/ConversationPlaceholder.dart';
 import 'package:localgptflutter/widgets/ConversationsList.dart';
 import 'package:localgptflutter/widgets/ConversationsWidget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io' as io;
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'SetupScreen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -24,10 +30,29 @@ class _MainScreenState extends State<MainScreen> {
 
   pingBackend() async {
     try {
+
+
+
       var pingReq = await CustomDio().get('/ping');
 
       if (pingReq.data['success']) {
+        // check if the model has been downloaded
+        final appSupportDir = await getApplicationSupportDirectory();
+
+
+        var modelPath =
+            '$appSupportDir/models/gpt4all/gpt4all-lora-quantized.bin';
+        // for a file
+        bool modelExists = await io.File(modelPath).exists();
+
+        if(!modelExists) {
+          screen = 'setup';
+        } else {
+          screen = 'conversations';
+        }
+
         screen = 'conversations';
+
         setState(() {});
       } else {
         startBackend();
@@ -112,10 +137,9 @@ class _MainScreenState extends State<MainScreen> {
           Text(loadingMessage)
         ],
       );
+    } else if (screen == 'setup') {
+      body = const SetupScreen();
     } else {
-
-
-
       body = const ConversationsWidget();
     }
 

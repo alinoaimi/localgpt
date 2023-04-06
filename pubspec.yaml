@@ -43,8 +43,15 @@ dependencies:
   dio: ^5.1.1
   chat_bubbles: ^1.4.0
   socket_io_client: ^2.0.1
+  path_provider: ^2.0.14
+  flutter_download_manager: ^0.5.5
+  flutter_platform_alert: ^0.3.0
+  package_info_plus: ^3.0.3
+  url_launcher: ^6.1.10
+  iconify_flutter: ^0.0.5
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.12.0"
   flutter_test:
     sdk: flutter
 
@@ -54,6 +61,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_icons:
+  image_path: "assets/images/icon.jpg"
+  macos:
+    generate: true
+    image_path: "assets/images/icon.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
